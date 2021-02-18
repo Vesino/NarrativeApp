@@ -62,26 +62,26 @@
                 </nav>
                 <div class="container-fluid">
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Upload your csv files</h1>
-                        
+                        <h1 class="h3 mb-0 text-gray-800">Parquets files from csv</h1>
                     </div>
                     <div class="row">
-
-                        <div class="d-sm-flex align-items-center justify-content-between mb-12">
-                            <a href="upload/" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Start, upload csv files </a>
-                        </div>
+                        <ul>
+                            {% for parquet in parquets %}
+                            <li><a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" href="{{ parquet.file_name.url }}">{{ parquet.file_name }}</a></li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
                 <div class="container-fluid">
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Download your parquets files</h1>             
+                        <h1 class="h3 mb-0 text-gray-800">CSV files uploaded </h1>
                     </div>
                     <div class="row">
-                        <div class="d-sm-flex align-items-center justify-content-between mb-12">
-                            <a href="listfiles/" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i>Download your uploaded files</a>
-                        </div>
+                        <ul>
+                            {% for csv in csvs %}
+                            <li><a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" href="{{ csv.file_name.url }}">{{ csv.file_name }}</a></li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
             </div>

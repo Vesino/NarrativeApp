@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.files import File
+from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 
 # Django Rest Framework
 from rest_framework.decorators import api_view
@@ -32,6 +34,11 @@ def index(request):
     return render(request, 'index.html', {})
 
 def upload(request):
+    """ View which handles all the proces of the data sent it for any user
+
+    This view receive any csv file corresponding to the data challenge, otherwise it won't process it
+    """
+
     context = {}
     if request.method == 'POST':
         form = CsvModelForm(request.POST or None, request.FILES or None)
@@ -76,7 +83,7 @@ def upload(request):
                 form.save()
                 form = CsvModelForm()
                 context['form'] = form
-
+                messages.success(request, "Data uploaded correctly" )
                 return render(request, 'upload.html', context)
             except Exception as e:
                 print(e)
@@ -85,3 +92,19 @@ def upload(request):
         form = CsvModelForm()
     context['form'] = form
     return render(request, 'upload.html', context)
+
+
+def list_files(request):
+    """View for list all the csv uploaded and the parquets files generated"""
+    context = {}
+    try:
+        parquets = Parquet.objects.all()
+        csvs = Csv.objects.all()
+        context.update({
+            'parquets':parquets,
+            'csvs':csvs
+        })
+        return render(request, 'listfiles.html', context)
+    except ObjectDoesNotExist:
+            messages.info(request, "You do not have any file yet")
+    return render(request, 'listfiles.html', context)
