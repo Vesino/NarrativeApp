@@ -17,8 +17,7 @@ from app.serializers import AssetListSerializer, CreateAssetSerializer
 from .forms import CsvModelForm
 
 # Utilities
-import csv
-import os
+import os, io, csv
 from datetime import datetime
 
 # pandas
@@ -35,71 +34,54 @@ def index(request):
 def upload(request):
     context = {}
     if request.method == 'POST':
-        form = CsvModelForm(request.POST, request.FILES)
-
+        form = CsvModelForm(request.POST or None, request.FILES or None)
         if form.is_valid():
-            file = request.FILES.__copy__()
-            path = file['file_name'].temporary_file_path()
-            df = pd.read_csv(path)
-            df.to_parquet('./parquets/df.parquet.gzip', compression='gzip')
-            file_p = open('./parquets/df.parquet.gzip', 'r+b')
-            parquet_file = File(file_p)
             try:
-                Parquet.objects.create(file_name=parquet_file)
-                last_p = Parquet.objects.last()
-                url = last_p.file_name.url
-                context['url'] = url
-            except:
-                raise Exception("Something went wrong")
-            os.remove('./parquets' + '/' + ''.join(os.listdir('./parquets')[-1:]))
-            try:
-                with open(path, 'r') as file:
-                    reader = csv.reader(file)
-                    for i, row in enumerate(reader):
-                        if i==0:
-                            pass
-                        else:
-                            # row is a list containing data for data-challenge
-                            # [0] stands for column timestamp 
-                            # [1] stands for column tag
-                            # [2] stands for column value 
-                            asset = row[1].split('/')[2]
-                            column = row[1].split('/')[3]
-                            value = row[2]
-                            timestamp = datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S%z')
-                            # timestamp = row[0]
-                            if len(asset) > 5:
-                                print("This is not an NarrativeWive Asset")
-                                return HttpResponse("This is not a data set for the challenge")
-                            try:
-                                asset_content(timestamp,asset,column,value)
-                            except:
-                                return HttpResponse('No fue posible guardar el dato como date time')
-                            # column_content(column,asset,value)
+                file = request.FILES.__copy__()
+                path = file['file_name'].temporary_file_path()
+                file_name = request.FILES['file_name']._get_name()
+                fn = '.'.join(file_name.split('.')[:-1])
+                param_file = io.TextIOWrapper(request.FILES['file_name'].file)
+                data_reader = csv.DictReader(param_file)
+                list_of_dict = list(data_reader)
 
-                            # print(f'This is the asset {asset}, this is the column {column}, this is the value {value}, the timestamp is {timestamp}')
-                           
-            except:
-                return HttpResponse("This is not a data set for the challenge Narrative Wave please upload one of them")
-            form.save()
-            form = CsvModelForm()
-            context['form'] = form
-            # The next logic handles the process data of tha last uploaded csv file
-            # just if the file is from the data challenge, otherwise it'll return an HttpResponse("This is not a data set for the challenge Narrative Wave please upload one of them")
-            # obj = Csv.objects.last()
-            # import pdb; pdb.set_trace()
-            # to_parquet(obj_to_parquet.file_name.path)
-            
+                objs = [
+                    Asset(
+                        timestamp=datetime.strptime(row['timestamp'], '%Y-%m-%d %H:%M:%S%z'),
+                        name=row['tag'].split('/')[2],
+                        column_name=row['tag'].split('/')[3],
+                        value=row['value']
+                    )
+                    for row in list_of_dict
+                ]
+                try:
+                    Asset.objects.bulk_create(objs)
+                    print('La información fue cargada correctamente')
+                except Exception as e:
+                    print(e)         
+
+                df = pd.read_csv(path)
+                df.to_parquet('./parquets/' + fn + '.parquet.gzip', compression='gzip')
+                file_p = open('./parquets/' + fn + '.parquet.gzip', 'r+b')
+                parquet_file = File(file_p)
+
+                try:
+                    Parquet.objects.create(file_name=parquet_file)
+                    last_p = Parquet.objects.last()
+                    url = last_p.file_name.url
+                    os.remove('./parquets' + '/' + ''.join(os.listdir('./parquets')[-1:]))
+                    context['url'] = url
+                except:
+                    print('error')
+                form.save()
+                form = CsvModelForm()
+                context['form'] = form
+
+                return render(request, 'upload.html', context)
+            except Exception as e:
+                print(e)
+                return HttpResponse('Seems that the uploaded data did not correspond to data for the challenge, please try again :)')
     else:
         form = CsvModelForm()
-        context['form'] = form
-    
+    context['form'] = form
     return render(request, 'upload.html', context)
-
-def asset_content(timestamp,asset,column,value):
-    return Asset.objects.create(
-        timestamp=timestamp, 
-        name=asset,
-        column_name=column,
-        value=value
-    )
