@@ -45,7 +45,7 @@ class Asset(models.Model):
     column_name = models.CharField(max_length=100,null=True, blank=True)
     #since the nature of colun value on csv for challenge is not consistent with a single type of value (ej: int, float)
     #value is set as charfield and in the view we could processed and transform it as int or float
-    value = models.CharField(max_length=50)
+    value = models.CharField(max_length=50,null=True, blank=True)
 
     objects = DataFrameManager()
 
