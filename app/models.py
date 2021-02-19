@@ -26,14 +26,13 @@ ASSET_CHOICES = (
 )
 
 class Csv(models.Model):
-    file_name = models.FileField(validators=[FileExtensionValidator(allowed_extensions=['csv'])])
+    file_name = models.FileField(upload_to='files', validators=[FileExtensionValidator(allowed_extensions=['csv', 'CSV'])])
 
     def __str__(self):
         return f"{self.file_name}"
 
 class Parquet(models.Model):
-    file_name = models.FileField(validators=[FileExtensionValidator(allowed_extensions=['gzip'])])
-    uploaded = models.DateTimeField(auto_now_add=True)
+    file_name = models.FileField(upload_to='files',validators=[FileExtensionValidator(allowed_extensions=['gzip'])])
 
     def __str__(self):
         return f'{self.file_name}'
