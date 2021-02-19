@@ -17,6 +17,7 @@
             </a>
 
             <hr class="sidebar-divider my-0">
+
         </ul>
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -27,6 +28,7 @@
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
+
                     <ul class="navbar-nav ml-auto">
 
                         <li class="nav-item dropdown no-arrow d-sm-none">
@@ -50,50 +52,73 @@
                                 </form>
                             </div>
                         </li>
+
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Luis Vargas</span>            
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Luis Vargas</span>
+                               
                             </a>
                         </li>
+
                     </ul>
+
                 </nav>
+
                 <div class="container-fluid">
+                    {% if messages %}
+                    <div class="mt-5 pt-4">
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Upload your csv files</h1>
+                        <h1 class="h3 mb-0 text-gray-800">See the number of columns by asset & a given date.</h1>
                         
                     </div>
+
                     <div class="row">
 
-                        <div class="d-sm-flex align-items-center justify-content-between mb-12">
+                        <!-- <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                        <div class="input-group">
+                            <input type="file" class="form-control bg-light border-0 small" placeholder="insert document" name="document">
+                                <button class="btn btn-primary" type="button" type="submit">
+                                    <i class="fas fa-search fa-sm"></i> upload file
+                                </button>
+                        </div>
+                    </form> -->
+
+                    <!-- Uploaded file -->
+                    <form method="post" enctype="multipart/form-data" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100">
+                        {% csrf_token %}
+                        <!-- <input type="file" name="document" placeholder="insert document"> -->
+                        {{ form }}
+                        <button type="submit" class="btn btn-primary">Visualize your uploaded data</button>
+                      </form>
+                      
+                        <!-- <div class="d-sm-flex align-items-center justify-content-between mb-12">
                             <a href="upload/" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Start, upload csv files </a>
-                        </div>
+                                class="fas fa-download fa-sm text-white-50"></i> Start </a>
+                        </div> -->
+
                     </div>
-                </div>
-                <div class="container-fluid">
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Download your parquets files</h1>             
-                    </div>
+
+                    
                     <div class="row">
-                        <div class="d-sm-flex align-items-center justify-content-between mb-12">
-                            <a href="listfiles/" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i>Download your uploaded files</a>
-                        </div>
+                        {% autoescape off %}
+                            {{ plot_div }}
+                        {% endautoescape %}
                     </div>
-                </div>
-                <div class="container-fluid">
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Visualize your data using our API</h1>             
-                    </div>
-                    <div class="row">
-                        <div class="d-sm-flex align-items-center justify-content-between mb-12">
-                            <a href="datavisual/" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i>Visualize data</a>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
             <footer class="sticky-footer bg-white">
@@ -105,9 +130,7 @@
             </footer>
         </div>
     </div>
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
+    </div>
 </body>
 
 

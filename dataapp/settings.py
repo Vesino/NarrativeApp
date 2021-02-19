@@ -118,3 +118,10 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT =  BASE_DIR / 'static_root'
 MEDIA_ROOT = BASE_DIR / 'media_root'
+
+
+# Django REST framework
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100
+}
