@@ -26,7 +26,7 @@ ASSET_CHOICES = (
 )
 
 class Csv(models.Model):
-    file_name = models.FileField(upload_to='csvs', validators=[FileExtensionValidator(allowed_extensions=['csv'])])
+    file_name = models.FileField(validators=[FileExtensionValidator(allowed_extensions=['csv'])])
 
     def __str__(self):
         return f"{self.file_name}"
