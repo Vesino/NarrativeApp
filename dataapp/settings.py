@@ -67,10 +67,21 @@ WSGI_APPLICATION = 'dataapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'narrativeapp',
+        'USER': 'luisuser',
+        'PASSWORD': 'NarrativePs1',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -116,8 +127,8 @@ MEDIA_URL = '/media/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static_in_env')
 ]
-STATIC_ROOT =  BASE_DIR / 'static_root'
-MEDIA_ROOT = BASE_DIR / 'media_root'
+STATIC_ROOT =  BASE_DIR / 'static/'
+MEDIA_ROOT = BASE_DIR / 'media/'
 
 
 # Django REST framework
