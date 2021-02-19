@@ -40,9 +40,9 @@ class Parquet(models.Model):
 
 
 class Asset(models.Model):
-    timestamp = models.DateTimeField()
-    name = models.CharField(max_length=20, choices=ASSET_CHOICES)
-    column_name = models.CharField(max_length=100)
+    timestamp = models.DateTimeField(null=True, blank=True)
+    name = models.CharField(max_length=20, choices=ASSET_CHOICES,null=True, blank=True)
+    column_name = models.CharField(max_length=100,null=True, blank=True)
     #since the nature of colun value on csv for challenge is not consistent with a single type of value (ej: int, float)
     #value is set as charfield and in the view we could processed and transform it as int or float
     value = models.CharField(max_length=50)
