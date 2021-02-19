@@ -99,6 +99,8 @@ def upload(request):
     return render(request, 'upload.html', context)
 
 
+
+
 def list_files(request):
     """View for list all the csv uploaded and the parquets files generated"""
     context = {}
@@ -114,8 +116,9 @@ def list_files(request):
             messages.info(request, "You do not have any file yet")
     return render(request, 'listfiles.html', context)
 
-# Consume API
 
+
+# Consume API
 def data_visualization(request):
     """
     View which handles the consume of our API
@@ -142,7 +145,7 @@ def data_visualization(request):
             context['plot_div'] = plot_div
             context['asset'] = asset
             context['form'] = form
-            messages.info(request, 'API consumed')
+            messages.info(request, 'API consumed, If you did not see values, try with another date')
     else:
         form = AssetForm()
     context['form'] = form

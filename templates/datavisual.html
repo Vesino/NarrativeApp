@@ -81,44 +81,22 @@
                         </div>
                     {% endif %}
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">See the number of columns by asset & a given date.</h1>
-                        
+                        <h1 class="h3 mb-0 text-gray-800">See the number of columns by asset & a given date.</h1>                        
                     </div>
 
                     <div class="row">
-
-                        <!-- <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100" method="POST" enctype="multipart/form-data">
+                        <form method="post" enctype="multipart/form-data" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100">
                             {% csrf_token %}
-                        <div class="input-group">
-                            <input type="file" class="form-control bg-light border-0 small" placeholder="insert document" name="document">
-                                <button class="btn btn-primary" type="button" type="submit">
-                                    <i class="fas fa-search fa-sm"></i> upload file
-                                </button>
-                        </div>
-                    </form> -->
-
-                    <!-- Uploaded file -->
-                    <form method="post" enctype="multipart/form-data" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100">
-                        {% csrf_token %}
-                        <!-- <input type="file" name="document" placeholder="insert document"> -->
-                        {{ form }}
-                        <button type="submit" class="btn btn-primary">Visualize your uploaded data</button>
-                      </form>
-                      
-                        <!-- <div class="d-sm-flex align-items-center justify-content-between mb-12">
-                            <a href="upload/" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Start </a>
-                        </div> -->
-
+                            <!-- <input type="file" name="document" placeholder="insert document"> -->
+                            {{ form }}
+                            <button type="submit" class="btn btn-primary">Visualize your uploaded data</button>
+                        </form>
                     </div>
-
-                    
                     <div class="row">
                         {% autoescape off %}
                             {{ plot_div }}
                         {% endautoescape %}
                     </div>
-                   
                 </div>
             </div>
             <footer class="sticky-footer bg-white">
