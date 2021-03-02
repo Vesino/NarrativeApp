@@ -10,6 +10,5 @@ We recomend isolate your code using virtualenv
 
 `pip install -r requirement.txt`
 
-This proyect is hosted on 
-* [CSV to parquet visualization](http://165.227.65.243/) - Application for the challenge on NarrativeWave
+Application for the challenge on NarrativeWave
 
